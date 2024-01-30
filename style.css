@@ -40,6 +40,32 @@ h1 {
     transform: scale(.5) translate(-100%, -50%);
 }
 
+#html-container {
+    pointer-events: none;
+    position: fixed;
+    border-radius: 20px;
+    margin: auto;
+    top: 10vh;
+    left: 50%;
+    border: none;
+    height: 85vh;
+    aspect-ratio: 1.5/2.5;
+    overflow: hidden;
+    outline: none;
+    background-color: white;
+    transform: translate(-50%, 0);
+
+    .limit {
+        position: absolute;
+        top: 13vh;
+        left: 0;
+        width: 100%;
+        height: .5vh;
+        background-color: rgba(217, 54, 54, 0.5);
+    
+    }
+}
+
 .next-fruit {
     position: absolute;
     top: 17vh;
