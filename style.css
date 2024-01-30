@@ -32,3 +32,10 @@ body {
     background-position: center;
     transform: translate(-50%, -50%);
 }
+
+/* on phones make the #matter-container have no margin-top */
+@media (max-width: 416px) {
+    #matter-container {
+        margin-top: 0;
+    }
+}

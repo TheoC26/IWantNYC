@@ -198,6 +198,9 @@ Matter.Events.on(engine, "collisionStart", function (event) {
     const pair = pairs[i];
 
     if (pair.bodyA.label === pair.bodyB.label) {
+        // play sound
+        // let audio = new Audio("Plop.mov");
+        // audio.play();
       const newSchoolIndex = getSchoolIndex(pair.bodyA.label) - 1;
       const newSchoolRef = schools[newSchoolIndex];
       console.log(newSchoolRef);
