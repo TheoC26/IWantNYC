@@ -107,6 +107,9 @@ let render = Matter.Render.create({
   },
 });
 
+// change gravity to double
+engine.world.gravity.y = 2;
+
 // make the color of the ground transparent
 let ground = Matter.Bodies.rectangle(
   matterContainer.clientWidth / 2,
@@ -130,21 +133,6 @@ let rightWall = Matter.Bodies.rectangle(
   { isStatic: true, label: "rightWall", render: { fillStyle: "transparent" } }
 );
 
-// for (let i = 0; i < amount; i++) {
-//   objects.push(
-//     Matter.Bodies.circle(
-//       Math.random() * matterContainer.clientWidth,
-//       Math.random() * matterContainer.clientHeight,
-//       Math.random() * size + 20,
-//       {
-//         restitution: 0.8,
-//         render: {
-//           fillStyle: colors[Math.floor(Math.random() * colors.length)],
-//         },
-//       }
-//     )
-//   );
-// }
 
 let mouse = Matter.Mouse.create(render.canvas);
 let mouseConstraint = Matter.MouseConstraint.create(engine, {
@@ -169,8 +157,8 @@ Matter.Events.on(mouseConstraint, "mousedown", function (event) {
   }
   const school = schools[nextSchool];
   let body = Matter.Bodies.circle(
-    event.mouse.position.x,
-    40,
+    event.mouse.position.x*2,
+    40 * (matterContainer.clientWidth / 416),
     school.size * (matterContainer.clientWidth / 416),
     {
       restitution: bounciness,
@@ -201,9 +189,10 @@ Matter.Events.on(engine, "collisionStart", function (event) {
         // play sound
         // let audio = new Audio("Plop.mov");
         // audio.play();
+        score += 10 - getSchoolIndex(pair.bodyA.label);
+        document.querySelector(".score span").innerText = score;
       const newSchoolIndex = getSchoolIndex(pair.bodyA.label) - 1;
       const newSchoolRef = schools[newSchoolIndex];
-      console.log(newSchoolRef);
       const newSchool = Matter.Bodies.circle(
         // average the x and y positions of the two colliding bodies
         (pair.bodyA.position.x + pair.bodyB.position.x) / 2,

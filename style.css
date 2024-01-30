@@ -2,6 +2,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+    font-family: 'Roboto', sans-serif;
 }
 
 body {
@@ -9,15 +10,34 @@ body {
     width: 100%;
 }
 
+h1 {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 2rem;
+    color: rgb(104, 73, 31);
+}
+
+.data {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    color: rgb(104, 73, 31);
+    font-weight: bold;
+}
+
 #matter-container {
-    border-radius: 10px;
+    position: fixed;
+    border-radius: 20px;
     margin: auto;
-    margin-top: 10vh;
+    top: 10vh;
+    left: 50%;
     border: none;
-    height: 85vh;
+    height: 170vh;
     aspect-ratio: 1.5/2.5;
     overflow: hidden;
     outline: none;
+    transform: scale(.5) translate(-100%, -50%);
 }
 
 .next-fruit {
@@ -30,12 +50,12 @@ body {
     /* no repeat */
     background-size: cover;
     background-position: center;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(.5);
 }
 
 /* on phones make the #matter-container have no margin-top */
 @media (max-width: 416px) {
     #matter-container {
-        margin-top: 0;
+        top: 0;
     }
 }
