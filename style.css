@@ -1,0 +1,34 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+    background-color: antiquewhite;
+    width: 100%;
+}
+
+#matter-container {
+    border-radius: 10px;
+    margin: auto;
+    margin-top: 10vh;
+    border: none;
+    height: 85vh;
+    aspect-ratio: 1.5/2.5;
+    overflow: hidden;
+    outline: none;
+}
+
+.next-fruit {
+    position: absolute;
+    top: 17vh;
+    left: 50%;
+    width: 3rem;
+    height: 3rem;
+    object-fit: cover;
+    /* no repeat */
+    background-size: cover;
+    background-position: center;
+    transform: translate(-50%, -50%);
+}
