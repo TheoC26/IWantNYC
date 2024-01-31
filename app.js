@@ -74,6 +74,16 @@ let render = Matter.Render.create({
   },
 });
 
+// preload all of the images through matter.js sprites
+schools.forEach((school, i) => {
+    let img = new Image();
+    img.src = "Images/" + school.name + ".png";
+    img.onload = () => {
+      console.log("loaded " + school.name);
+    };
+});
+
+
 let objects = [];
 let score = 0;
 let nycs = 0;
