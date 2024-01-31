@@ -75,14 +75,27 @@ let render = Matter.Render.create({
 });
 
 // preload all of the images through matter.js sprites
-schools.forEach((school, i) => {
-    let img = new Image();
-    img.src = "Images/" + school.name + ".png";
-    img.onload = () => {
-      console.log("loaded " + school.name);
-    };
+schools.forEach((school) => {
+  let temp = Matter.Bodies.circle(
+    0,
+    0,
+    0,
+    {
+      isStatic: true,
+      render: {
+        sprite: {
+          texture: "Images/" + school.name + ".png",
+          xScale:
+            1,
+          yScale:
+            1,
+        },
+      },
+    }
+  );
+    Matter.World.add(engine.world, temp);
+    // Matter.World.remove(engine.world, temp);
 });
-
 
 let objects = [];
 let score = 0;
@@ -120,40 +133,40 @@ if (!localStorage.getItem("IWANTNYC")) {
   console.log(local);
   document.querySelector(".high-score span").innerText = local.highScore;
   document.querySelector(".nycs span").innerText = local.nycs;
-//   document.querySelector(".score span").innerText = local.score;
+  //   document.querySelector(".score span").innerText = local.score;
   let tempObjects = local.objects;
-//   score = local.score;
+  //   score = local.score;
   nycs = local.nycs;
-//   nextSchool = local.nextSchool;
+  //   nextSchool = local.nextSchool;
 
   console.log(tempObjects.length);
 
-//   for (let i = 0; i < tempObjects.length; i++) {
-//     let school = schools[getSchoolIndex(tempObjects[i].label)];
+  //   for (let i = 0; i < tempObjects.length; i++) {
+  //     let school = schools[getSchoolIndex(tempObjects[i].label)];
 
-//     let body = Matter.Bodies.circle(
-//       tempObjects[i].position.x,
-//       tempObjects[i].position.y,
-//       tempObjects[i].circleRadius,
-//       {
-//         restitution: bounciness,
-//         friction: friction,
-//         label: tempObjects[i].label,
-//         render: {
-//           sprite: {
-//             texture: "Images/" + tempObjects[i].label + ".png",
-//             xScale:
-//               school.scaler * school.size * (matterContainer.clientWidth / 416),
-//             yScale:
-//               school.scaler * school.size * (matterContainer.clientWidth / 416),
-//           },
-//         },
-//       }
-//     );
-    // objects[i] = body;
-    // console.log(body);
-    // Matter.World.add(engine.world, body);
-//   }
+  //     let body = Matter.Bodies.circle(
+  //       tempObjects[i].position.x,
+  //       tempObjects[i].position.y,
+  //       tempObjects[i].circleRadius,
+  //       {
+  //         restitution: bounciness,
+  //         friction: friction,
+  //         label: tempObjects[i].label,
+  //         render: {
+  //           sprite: {
+  //             texture: "Images/" + tempObjects[i].label + ".png",
+  //             xScale:
+  //               school.scaler * school.size * (matterContainer.clientWidth / 416),
+  //             yScale:
+  //               school.scaler * school.size * (matterContainer.clientWidth / 416),
+  //           },
+  //         },
+  //       }
+  //     );
+  // objects[i] = body;
+  // console.log(body);
+  // Matter.World.add(engine.world, body);
+  //   }
   chooseNextSchool();
 }
 
