@@ -1,34 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-M4VCTCCP");
+    </script>
+    <!-- End Google Tag Manager -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="style.css" rel="stylesheet" type="text/css" />
     <title>i want nyc</title>
-</head>
-<body>
+    <!-- metadata -->
+    <meta
+      name="description"
+      content="i want nyc - try to connect all the nyc private high schools to build up to the an nyc!"
+    />
+    <meta
+      name="keywords"
+      content="i want nyc, game, suika, i want watermelon, iwantnyc, dalton, trinity, horaceman"
+    />
+    <meta name="author" content="Theodore Chan" />
+  </head>
+  <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-M4VCTCCP"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <h1>i want nyc</h1>
     <div id="html-container">
-        <div class="limit"></div>
-      </div>
-    <div
-        id="matter-container"
-      ></div>
-      
-      <div class="next-fruit"></div>
-      <div class="data">
-        <div class="score">score: <span>0</span></div>
-        <div class="high-score">high score: <span>0</span></div>
-        <div class="nycs">nycs: <span>0</span></div>
-      </div>
-      
+      <div class="limit"></div>
+    </div>
+    <div id="matter-container"></div>
 
-      <!-- <div class="overlay">
+    <div class="next-fruit"></div>
+    <div class="data">
+      <div class="score">score: <span>0</span></div>
+      <div class="high-score">high score: <span>0</span></div>
+      <div class="nycs">nycs: <span>0</span></div>
+    </div>
+
+    <!-- <div class="overlay">
         <h1>Creative Coding Fest</h1>
         <h2>January 18th 2024</h2>
       </div> -->
 
     <script src="matter.js"></script>
     <script type="module" src="app.js"></script>
-</body>
+  </body>
 </html>

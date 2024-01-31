@@ -62,6 +62,18 @@ const schools = [
   },
 ];
 
+let engine = new Matter.Engine.create();
+let render = Matter.Render.create({
+  element: matterContainer,
+  engine: engine,
+  options: {
+    width: matterContainer.clientWidth,
+    height: matterContainer.clientHeight,
+    wireframes: false,
+    background: "transparent",
+  },
+});
+
 let objects = [];
 let score = 0;
 let nycs = 0;
@@ -69,28 +81,105 @@ let nextSchool = 10;
 let canClick = true;
 let gameOver = false;
 
+let localStorageModel = {
+  highScore: 0,
+  nycs: 0,
+  score: 0,
+  nextSchool: 10,
+  objects: [],
+};
+
 // if there is no high score in local storage, then set the high score to 0
-if (!localStorage.getItem("highScore")) {
-  localStorage.setItem("highScore", 0);
+// if (!localStorage.getItem("highScore")) {
+//   localStorage.setItem("highScore", 0);
+// } else {
+//   document.querySelector(".high-score span").innerText =
+//     localStorage.getItem("highScore");
+// }
+// if (!localStorage.getItem("nycs")) {
+//   localStorage.setItem("nycs", 0);
+// } else {
+//   console.log(localStorage.getItem("nycs"));
+//   document.querySelector(".nycs span").innerText = localStorage.getItem("nycs");
+// }
+
+if (!localStorage.getItem("IWANTNYC")) {
+  localStorage.setItem("IWANTNYC", JSON.stringify(localStorageModel));
 } else {
-    document.querySelector(".high-score span").innerText = localStorage.getItem("highScore");
-}
-if (!localStorage.getItem("nycs")) {
-  localStorage.setItem("nycs", 0);
-} else {
-    console.log(localStorage.getItem("nycs"))
-    document.querySelector(".nycs span").innerText = localStorage.getItem("nycs");
+  let local = JSON.parse(localStorage.getItem("IWANTNYC"));
+  console.log(local);
+  document.querySelector(".high-score span").innerText = local.highScore;
+  document.querySelector(".nycs span").innerText = local.nycs;
+  document.querySelector(".score span").innerText = local.score;
+  let tempObjects = local.objects;
+//   score = local.score;
+  nycs = local.nycs;
+//   nextSchool = local.nextSchool;
+
+  console.log(tempObjects.length);
+
+//   for (let i = 0; i < tempObjects.length; i++) {
+//     let school = schools[getSchoolIndex(tempObjects[i].label)];
+
+//     let body = Matter.Bodies.circle(
+//       tempObjects[i].position.x,
+//       tempObjects[i].position.y,
+//       tempObjects[i].circleRadius,
+//       {
+//         restitution: bounciness,
+//         friction: friction,
+//         label: tempObjects[i].label,
+//         render: {
+//           sprite: {
+//             texture: "Images/" + tempObjects[i].label + ".png",
+//             xScale:
+//               school.scaler * school.size * (matterContainer.clientWidth / 416),
+//             yScale:
+//               school.scaler * school.size * (matterContainer.clientWidth / 416),
+//           },
+//         },
+//       }
+//     );
+    // objects[i] = body;
+    // console.log(body);
+    // Matter.World.add(engine.world, body);
+//   }
+  chooseNextSchool();
 }
 
 function chooseNextSchool() {
-  nextSchool = 10 - Math.floor(Math.random() * 4);
-
+  console.log(nextSchool);
   nextFruitRef.style.backgroundImage = `url(Images/${schools[nextSchool].name}.png)`;
   // change the width and height
   nextFruitRef.style.width =
     schools[nextSchool].size * 2 * (matterContainer.clientWidth / 416) + "px";
   nextFruitRef.style.height =
     schools[nextSchool].size * 2 * (matterContainer.clientWidth / 416) + "px";
+
+  // save everything to local storage
+  let local = JSON.parse(localStorage.getItem("IWANTNYC"));
+  local.score = score;
+  local.objects = objects;
+  local.nextSchool = nextSchool;
+
+  const circularReplacer = () => {
+    const seen = new WeakSet();
+    return (key, value) => {
+      if (typeof value === "object" && value !== null) {
+        if (seen.has(value)) {
+          return "[Circular]";
+        }
+        seen.add(value);
+      }
+      return value;
+    };
+  };
+
+  console.log(local);
+
+  localStorage.setItem("IWANTNYC", JSON.stringify(local, circularReplacer()));
+
+  //   localStorage.setItem("IWANTNYC", JSON.stringify(local));
 }
 chooseNextSchool();
 
@@ -103,6 +192,7 @@ function deleteSchool() {
     canClick = true;
     checkGameOver();
     if (!gameOver) {
+      nextSchool = 10 - Math.floor(Math.random() * 4);
       chooseNextSchool();
     } else {
     }
@@ -124,7 +214,7 @@ function checkGameOver() {
   for (let i = 0; i < objects.length; i++) {
     if (
       objects[i].position.y - objects[i].circleRadius <
-      215 * (matterContainer.clientWidth / 831)
+      215 * (matterContainer.clientWidth / 831) + 800
     ) {
       gameOver = true;
       gameOverState();
@@ -135,40 +225,30 @@ function checkGameOver() {
 function gameOverState() {
   console.log("Game Over");
   // loop through all of the objects and remove them but wait one second before removing each one
-  for (let i = objects.length-1; i >=0; i--) {
+  for (let i = objects.length - 1; i >= 0; i--) {
     setTimeout(() => {
-     score += 11 - getSchoolIndex(objects[i].label);
-     Matter.World.remove(engine.world, objects[i]);
-     document.querySelector(".score span").innerText = score;
-
-     if (i === 0) {
-        // if the score is greater than the high score, then set the high score to the score
-        if (score > localStorage.getItem("highScore")) {
-          localStorage.setItem("highScore", score);
-          document.querySelector(".high-score span").innerText = score;
-        }
-    //    objects = [];
-    //    score = 0;
-    //    document.querySelector(".score span").innerText = score;
-    //    chooseNextSchool();
-    //    gameOver = false;
-     }
+      score += 11 - getSchoolIndex(objects[i].label);
+      Matter.World.remove(engine.world, objects[i]);
+      document.querySelector(".score span").innerText = score;
     }, i * 500);
   }
+  setTimeout(() => {
+    let local = JSON.parse(localStorage.getItem("IWANTNYC"));
+    if (score > local.highScore) {
+      local.highScore = score;
+      document.querySelector(".high-score span").innerText = score;
+    }
+    localStorage.setItem("IWANTNYC", JSON.stringify(local));
+    // reset the game
+    objects = [];
+    score = 0;
+    document.querySelector(".score span").innerText = score;
+    gameOver = false;
+    canClick = true;
+    nextSchool = 10;
+    chooseNextSchool();
+  }, objects.length * 500);
 }
-
-
-let engine = new Matter.Engine.create();
-let render = Matter.Render.create({
-  element: matterContainer,
-  engine: engine,
-  options: {
-    width: matterContainer.clientWidth,
-    height: matterContainer.clientHeight,
-    wireframes: false,
-    background: "transparent",
-  },
-});
 
 // change gravity to double
 engine.world.gravity.y = 2;
@@ -254,12 +334,16 @@ Matter.Events.on(mouseConstraint, "mousedown", function (event) {
   deleteSchool();
 });
 Matter.Events.on(engine, "collisionStart", function (event) {
+  if (gameOver) {
+    return;
+  }
   const pairs = event.pairs;
 
   for (let i = 0; i < pairs.length; i++) {
     const pair = pairs[i];
 
     if (pair.bodyA.label === pair.bodyB.label) {
+      console.log("collision!");
       // play sound
       // let audio = new Audio("Plop.mov");
       // audio.play();
@@ -267,14 +351,14 @@ Matter.Events.on(engine, "collisionStart", function (event) {
       document.querySelector(".score span").innerText = score;
 
       // if the pair.bodyA.label is nyc, then add 1 to nycs and also wait 1 second and then delete the nyc
-        if (pair.bodyA.label === "nyc") {
-            nycs++;
-            localStorage.setItem("nycs", nycs);
-            document.querySelector(".nycs span").innerText = nycs;
-            setTimeout(() => {
-                Matter.World.remove(engine.world, pair.bodyA);
-            }, 1000);
-        }
+      if (pair.bodyA.label === "nyc") {
+        nycs++;
+        localStorage.setItem("nycs", nycs);
+        document.querySelector(".nycs span").innerText = nycs;
+        setTimeout(() => {
+          Matter.World.remove(engine.world, pair.bodyA);
+        }, 1000);
+      }
 
       const newSchoolIndex = getSchoolIndex(pair.bodyA.label) - 1;
       const newSchoolRef = schools[newSchoolIndex];
