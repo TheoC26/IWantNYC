@@ -110,7 +110,7 @@ if (!localStorage.getItem("IWANTNYC")) {
   console.log(local);
   document.querySelector(".high-score span").innerText = local.highScore;
   document.querySelector(".nycs span").innerText = local.nycs;
-  document.querySelector(".score span").innerText = local.score;
+//   document.querySelector(".score span").innerText = local.score;
   let tempObjects = local.objects;
 //   score = local.score;
   nycs = local.nycs;
