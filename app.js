@@ -214,7 +214,7 @@ function checkGameOver() {
   for (let i = 0; i < objects.length; i++) {
     if (
       objects[i].position.y - objects[i].circleRadius <
-      215 * (matterContainer.clientWidth / 831) + 800
+      215 * (matterContainer.clientWidth / 831)
     ) {
       gameOver = true;
       gameOverState();
