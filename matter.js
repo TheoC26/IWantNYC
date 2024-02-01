@@ -25,10 +25,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-var Gluten = new FontFace("gluten", "url(/Gluten-Black.ttf)");
-Gluten.load().then(function (font) {
-  document.fonts.add(font);
-});
+// var Gluten = new FontFace("gluten", "url(/Gluten-Black.ttf)");
+// Gluten.load().then(function (font) {
+//   document.fonts.add(font);
+// });
 (function webpackUniversalModuleDefinition(root, factory) {
   if (typeof exports === "object" && typeof module === "object")
     module.exports = factory();

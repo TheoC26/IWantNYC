@@ -76,25 +76,18 @@ let render = Matter.Render.create({
 
 // preload all of the images through matter.js sprites
 schools.forEach((school) => {
-  let temp = Matter.Bodies.circle(
-    0,
-    0,
-    0,
-    {
-      isStatic: true,
-      render: {
-        sprite: {
-          texture: "Images/" + school.name + ".png",
-          xScale:
-            1,
-          yScale:
-            1,
-        },
+  let temp = Matter.Bodies.circle(0, 0, 0, {
+    isStatic: true,
+    render: {
+      sprite: {
+        texture: "Images/" + school.name + ".png",
+        xScale: 1,
+        yScale: 1,
       },
-    }
-  );
-    Matter.World.add(engine.world, temp);
-    // Matter.World.remove(engine.world, temp);
+    },
+  });
+  Matter.World.add(engine.world, temp);
+  // Matter.World.remove(engine.world, temp);
 });
 
 let objects = [];
@@ -130,7 +123,6 @@ if (!localStorage.getItem("IWANTNYC")) {
   localStorage.setItem("IWANTNYC", JSON.stringify(localStorageModel));
 } else {
   let local = JSON.parse(localStorage.getItem("IWANTNYC"));
-  console.log(local);
   document.querySelector(".high-score span").innerText = local.highScore;
   document.querySelector(".nycs span").innerText = local.nycs;
   //   document.querySelector(".score span").innerText = local.score;
@@ -138,8 +130,6 @@ if (!localStorage.getItem("IWANTNYC")) {
   //   score = local.score;
   nycs = local.nycs;
   //   nextSchool = local.nextSchool;
-
-  console.log(tempObjects.length);
 
   //   for (let i = 0; i < tempObjects.length; i++) {
   //     let school = schools[getSchoolIndex(tempObjects[i].label)];
@@ -171,7 +161,6 @@ if (!localStorage.getItem("IWANTNYC")) {
 }
 
 function chooseNextSchool() {
-  console.log(nextSchool);
   nextFruitRef.style.backgroundImage = `url(Images/${schools[nextSchool].name}.png)`;
   // change the width and height
   nextFruitRef.style.width =
@@ -198,7 +187,6 @@ function chooseNextSchool() {
     };
   };
 
-  console.log(local);
 
   localStorage.setItem("IWANTNYC", JSON.stringify(local, circularReplacer()));
 
@@ -246,7 +234,6 @@ function checkGameOver() {
 }
 
 function gameOverState() {
-  console.log("Game Over");
   // loop through all of the objects and remove them but wait one second before removing each one
   for (let i = objects.length - 1; i >= 0; i--) {
     setTimeout(() => {
@@ -275,8 +262,6 @@ function gameOverState() {
 
 // change gravity to double
 engine.world.gravity.y = 2;
-
-console.log(matterContainer.clientWidth);
 
 let ceiling = Matter.Bodies.rectangle(
   matterContainer.clientWidth / 2,
@@ -366,22 +351,11 @@ Matter.Events.on(engine, "collisionStart", function (event) {
     const pair = pairs[i];
 
     if (pair.bodyA.label === pair.bodyB.label) {
-      console.log("collision!");
       // play sound
       // let audio = new Audio("Plop.mov");
       // audio.play();
       score += 11 - getSchoolIndex(pair.bodyA.label);
       document.querySelector(".score span").innerText = score;
-
-      // if the pair.bodyA.label is nyc, then add 1 to nycs and also wait 1 second and then delete the nyc
-      if (pair.bodyA.label === "nyc") {
-        nycs++;
-        localStorage.setItem("nycs", nycs);
-        document.querySelector(".nycs span").innerText = nycs;
-        setTimeout(() => {
-          Matter.World.remove(engine.world, pair.bodyA);
-        }, 1000);
-      }
 
       const newSchoolIndex = getSchoolIndex(pair.bodyA.label) - 1;
       const newSchoolRef = schools[newSchoolIndex];
@@ -413,7 +387,21 @@ Matter.Events.on(engine, "collisionStart", function (event) {
       Matter.World.remove(engine.world, pair.bodyA);
       Matter.World.remove(engine.world, pair.bodyB);
       Matter.World.add(engine.world, newSchool);
-      objects.push(newSchool);
+      if (newSchool.label === "nyc") {
+        score += 30;
+        nycs++;
+        // localStorage.setItem("nycs", nycs);
+        let local = JSON.parse(localStorage.getItem("IWANTNYC"));
+        local.nycs = nycs;
+        localStorage.setItem("IWANTNYC", JSON.stringify(local));
+        document.querySelector(".nycs span").innerText = nycs;
+        setTimeout(() => {
+          Matter.World.remove(engine.world, newSchool);
+        }, 1000);
+      } else {
+        objects.push(newSchool);
+      }
+
       // delete the old schools
       objects = objects.filter(
         (object) => object !== pair.bodyA && object !== pair.bodyB
