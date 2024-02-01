@@ -1,5 +1,39 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-analytics.js";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  addDoc,
+} from "https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore.js";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyDw8H3CIfOLdXt7k6q6-3grIeo7SC7mlcU",
+  authDomain: "iwantnyc-d52e0.firebaseapp.com",
+  projectId: "iwantnyc-d52e0",
+  storageBucket: "iwantnyc-d52e0.appspot.com",
+  messagingSenderId: "141033085818",
+  appId: "1:141033085818:web:f216e64a40664dd388d4c3",
+  measurementId: "G-MX78M1QCWX",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+// const analytics = getAnalytics(app);
+const db = getFirestore(app);
+
 const matterContainer = document.getElementById("matter-container");
 const nextFruitRef = document.querySelector(".next-fruit");
+const highScore1 = document.querySelector("#score1");
+const highScore2 = document.querySelector("#score2");
+const highScore3 = document.querySelector("#score3");
+const highScore4 = document.querySelector("#score4");
+const highScore5 = document.querySelector("#score5");
 
 const bounciness = 0.5;
 const friction = 0.6;
@@ -96,6 +130,24 @@ let nycs = 0;
 let nextSchool = 10;
 let canClick = true;
 let gameOver = false;
+let highScores = [];
+
+async function getHighScores() {
+  highScores = [];
+  const querySnapshot = await getDocs(collection(db, "highscores"));
+  querySnapshot.forEach((doc) => {
+    highScores.push(doc.data());
+  });
+
+  highScores.sort((a, b) => b.score - a.score);
+  console.log(highScores);
+  highScore1.innerText = highScores[0].name + " - " + highScores[0].score;
+  highScore2.innerText = highScores[1].name + " - " + highScores[1].score;
+  highScore3.innerText = highScores[2].name + " - " + highScores[2].score;
+  highScore4.innerText = highScores[3].name + " - " + highScores[3].score;
+  highScore5.innerText = highScores[4].name + " - " + highScores[4].score;
+}
+getHighScores();
 
 let localStorageModel = {
   highScore: 0,
@@ -187,7 +239,6 @@ function chooseNextSchool() {
     };
   };
 
-
   localStorage.setItem("IWANTNYC", JSON.stringify(local, circularReplacer()));
 
   //   localStorage.setItem("IWANTNYC", JSON.stringify(local));
@@ -233,6 +284,17 @@ function checkGameOver() {
   }
 }
 
+async function addHighScore() {
+  const name = prompt("You got a high score! Enter your name:");
+  const docRef = collection(db, "highscores");
+  await addDoc(docRef, {
+    name: name,
+    date: new Date(),
+    score: score,
+  });
+  getHighScores();
+}
+
 function gameOverState() {
   // loop through all of the objects and remove them but wait one second before removing each one
   for (let i = objects.length - 1; i >= 0; i--) {
@@ -243,6 +305,9 @@ function gameOverState() {
     }, i * 500);
   }
   setTimeout(() => {
+    if (score > highScores[4].score) {
+      addHighScore();
+    }
     let local = JSON.parse(localStorage.getItem("IWANTNYC"));
     if (score > local.highScore) {
       local.highScore = score;
