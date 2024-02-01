@@ -79,9 +79,23 @@ h1 {
     transform: translate(-50%, -50%) scale(.5);
 }
 
+@media (max-width: 730px) {
+    .data {
+        font-size: 1rem;
+        top: .5rem;
+        right: 1.7rem;
+    }
+}
+
 /* on phones make the #matter-container have no margin-top */
 @media (max-width: 416px) {
     #matter-container {
         top: 0;
+    }
+    #html-container {
+        top: 0;
+    }
+    .next-fruit {
+        top: 3rem;
     }
 }
