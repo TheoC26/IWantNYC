@@ -80,14 +80,14 @@ const schools = [
     scaler: 0.0067,
   },
   {
-    name: "Riverdale",
+    name: "Brearly",
     size: 35,
-    scaler: 0.0092,
+    scaler: 0.00325,
   },
   {
-    name: "Brearly",
+    name: "Riverdale",
     size: 30,
-    scaler: 0.00325,
+    scaler: 0.0092,
   },
   {
     name: "Chapin",
@@ -304,7 +304,8 @@ function gameOverState() {
       document.querySelector(".score span").innerText = score;
     }, i * 500);
   }
-  setTimeout(() => {
+  setTimeout(async () => {
+    await getHighScores();
     if (score > highScores[4].score) {
       addHighScore();
     }
