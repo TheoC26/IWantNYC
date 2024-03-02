@@ -108,6 +108,13 @@ let render = Matter.Render.create({
   },
 });
 
+// on screen resize, change the size of the canvas
+window.addEventListener("resize", () => {
+  console.log("resize");
+  // reload the page
+  location.reload();
+});
+
 // preload all of the images through matter.js sprites
 schools.forEach((school) => {
   let temp = Matter.Bodies.circle(0, 0, 0, {
